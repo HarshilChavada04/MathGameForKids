@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# Quasar App (chikuproject)
+# Quasar App
 
 A Quasar Project
 
