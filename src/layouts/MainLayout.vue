@@ -1,106 +1,64 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <div v-if="route.path !== '/'" class="q-pa-none q-mt-md">
+      <div class="q-gutter-md row items-center justify-between">
+        <!-- Back button at the top left -->
         <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+          label="Back"
+          icon="arrow_back"
+          @click="router.push('/')"
+          class="q-ma-md"
+        ></q-btn>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
+        <!-- Score at the top right -->
+        <q-btn
+          :label="`Score: ${score}`"
+          @click="router.push('/')"
+          class="q-mb-md text-right"
+        ></q-btn>
+      </div>
+    </div>
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script>
+import { useRoute, useRouter } from "vue-router";
+import { defineComponent } from "vue";
+import { useAuthStore } from "../stores/auth"; // Import your Pinia store
 
-defineOptions({
-  name: 'MainLayout'
-})
+export default defineComponent({
+  name: "MainLayout",
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+  setup() {
+    // Access the Pinia store
+    const authStore = useAuthStore();
+    const route = useRoute();
+    const router = useRouter();
 
-const leftDrawerOpen = ref(false)
+    // Initialize the score in the store
+    authStore.setScore(0); // Set initial score
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+    return {
+      authStore,
+      route,
+      router,
+    };
+  },
+
+  computed: {
+    // Dynamically bind the score from the store
+    score() {
+      return this.authStore.score;
+    },
+  },
+});
 </script>
+
+<style scoped>
+.container {
+  cursor: pointer;
+}
+</style>
