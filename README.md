@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Quasar App
 
 A Quasar Project
