@@ -1,0 +1,1 @@
+import{d as t}from"./pinia.18801a98.js";const r=t("auth",{state:()=>({score:0}),actions:{setScore(e){this.score=e},incrementScore(e=1){this.score+=e},decrementScore(e=1){this.score-=e}}});export{r as u};
